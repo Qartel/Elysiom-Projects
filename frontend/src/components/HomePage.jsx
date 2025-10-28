@@ -4,6 +4,7 @@ import { Button } from './ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
 import { services, products, caseStudies, testimonials, stats } from '../mock';
+import AnimatedRobot from './AnimatedRobot';
 
 const iconMap = {
   Bot: Bot,
