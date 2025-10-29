@@ -152,15 +152,14 @@ const HomePage = () => {
               </div>
 
               {/* Right - Animated Robot */}
-              {/* Right - Animated Robot */}
               <div className="flex items-center justify-center">
                 <div className="relative w-full max-w-md">
                   <div className="aspect-square relative">
                     <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-purple-900/20 rounded-full blur-3xl animate-pulse"></div>
                     <div 
                       className={`relative ${
-                        robotState.dancing 
-                          ? `animate-robot-${robotState.action}` 
+                        robotState.dancing
+                          ? `robot-${robotState.action}-anim`
                           : 'transition-all duration-300'
                       }`}
                       style={{
@@ -170,17 +169,24 @@ const HomePage = () => {
                               robotState.color === 'blue' ? '59, 130, 246' :
                               robotState.color === 'green' ? '34, 197, 94' :
                               '147, 51, 234'
-                            }, 0.8))` 
+                            }, 0.8))`
                           : 'drop-shadow(0 0 60px rgba(147, 51, 234, 0.4))'
                       }}
                     >
-                      <AnimatedRobot armsPosition={
-                        robotState.dancing 
-                          ? (robotState.action === 'yes' ? 'celebration' : 
-                             robotState.action === 'no' ? 'raised' : 'normal')
-                          : 'normal'
-                      } />
+                      <AnimatedRobot 
+                        dancing={robotState.dancing}
+                        armsPosition={
+                          robotState.dancing 
+                            ? (robotState.action === 'yes'
+                                ? 'celebration'
+                                : robotState.action === 'no'
+                                  ? 'raised'
+                                  : 'normal')
+                            : 'normal'
+                        }
+                      />
                     </div>
+                      
                     {/* Floating particles */}
                     <div className={`absolute top-1/4 left-1/4 w-3 h-3 rounded-full ${robotState.dancing ? 'animate-ping-fast' : 'animate-ping'}`}
                       style={{ backgroundColor: robotState.dancing ? 

@@ -1,12 +1,12 @@
 import React from 'react';
 import './AnimatedRobot.css';
 
-const AnimatedRobot = ({ armsPosition = 'normal' }) => {
+const AnimatedRobot = ({ armsPosition = 'normal', dancing = false }) => {
   return (
     <div className="robot-container">
       <svg
         viewBox="0 0 400 500"
-        className="animated-robot"
+        className={`animated-robot ${dancing ? 'robot-dancing' : ''}`}
         xmlns="http://www.w3.org/2000/svg"
       >
         {/* Floating particles */}
