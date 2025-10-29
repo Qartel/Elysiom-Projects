@@ -27,6 +27,53 @@ const HomePage = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const triggerRobotAndThen = (actionType, afterDance) => {
+    // map action type to robot mood
+    // You can customize this however you like
+    let color = 'purple';
+    let poseAction = null; // "yes", "no", etc (used for arms + animation)
+
+    switch (actionType) {
+      case 'success': // happy / celebrate
+        color = 'green';
+        poseAction = 'yes';
+        break;
+      case 'thinking': // evaluating / maybe
+        color = 'blue';
+        poseAction = 'maybe';
+        break;
+      case 'error': // reject / no
+        color = 'red';
+        poseAction = 'no';
+        break;
+      default:
+        color = 'purple';
+        poseAction = 'maybe';
+    }
+
+    // 1. show robot animation
+    setRobotState({
+      dancing: true,
+      color,
+      action: poseAction, // 'yes' | 'maybe' | 'no'
+    });
+
+    // 2. after animation ends, reset robot and do the real work
+    setTimeout(() => {
+      setRobotState({
+        dancing: false,
+        color: 'purple',
+        action: null,
+      });
+
+      // then run whatever the CTA wanted to do
+      if (typeof afterDance === 'function') {
+        afterDance();
+      }
+    }, 1200); // matches animation duration
+  };
+
+
     const handleRobotAction = (action) => {
     let color = 'purple';
     if (action === 'no') color = 'red';
@@ -132,10 +179,19 @@ const HomePage = () => {
                   Transform your operations with cutting-edge agentic automation. Deploy intelligent agents that work autonomously, learn continuously, and deliver exceptional results.
                 </p>
                 <div className="flex flex-wrap gap-4">
-                  <Button onClick={() => scrollToSection('contact')} size="lg" className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-6 text-lg rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/50 hover:scale-105">
+                  <Button
+                    onClick={() =>
+                      triggerRobotAndThen('success', () => {
+                        scrollToSection('contact');
+                      })
+                    }
+                    size="lg"
+                    className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-6 text-lg rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/50 hover:scale-105"
+                  >
                     Start Free Trial
                     <ChevronRight className="ml-2 w-5 h-5" />
                   </Button>
+                  
                   <Button onClick={() => scrollToSection('products')} size="lg" variant="outline" className="border-2 border-gray-700 text-white hover:bg-gray-900 px-8 py-6 text-lg rounded-xl transition-all duration-300">
                     View Products
                   </Button>
@@ -213,7 +269,7 @@ const HomePage = () => {
                   </div>
                   
                   {/* Action Buttons */}
-                  <div className="flex gap-3 mt-6 justify-center">
+                  {/* <div className="flex gap-3 mt-6 justify-center">
                     <Button
                       onClick={() => handleRobotAction('no')}
                       disabled={robotState.dancing}
@@ -235,7 +291,7 @@ const HomePage = () => {
                     >
                       Yes
                     </Button>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>
