@@ -1,0 +1,74 @@
+.App {
+  min-height: 100vh;
+}
+
+.social-platform-tab {
+  min-height: 60vh;
+}
+
+/* Platform-specific accent colors */
+.platform-instagram { --platform-color: #E1306C; }
+.platform-youtube { --platform-color: #FF0000; }
+.platform-linkedin { --platform-color: #0A66C2; }
+.platform-facebook { --platform-color: #1877F2; }
+.platform-threads { --platform-color: #000000; }
+
+/* Content card hover effects */
+.content-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.content-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+/* Platform badge animations */
+.platform-badge {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Smooth transitions for tabs */
+.tabs-content {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Status indicators */
+.status-posted { color: #10b981; }
+.status-scheduled { color: #3b82f6; }
+.status-draft { color: #6b7280; }
+
+/* Grid layout responsive */
+@media (max-width: 1536px) {
+  .content-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+}

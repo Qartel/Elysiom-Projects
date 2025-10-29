@@ -1,0 +1,18 @@
+{
+  "name": "socialflow",
+  "version": "1.0.0",
+  "description": "Enterprise Multi-Platform Social Media Management",
+  "author": "Elysiom",
+  "license": "PROPRIETARY",
+  "scripts": {
+    "install:all": "cd frontend && yarn install && cd ../backend && pip install -r requirements.txt",
+    "dev": "concurrently \"cd backend && uvicorn main:app --reload --port 7002\" \"cd frontend && yarn start\"",
+    "start": "./start.sh",
+    "stop": "./stop.sh",
+    "frontend": "cd frontend && yarn start",
+    "backend": "cd backend && uvicorn main:app --reload --port 7002"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
