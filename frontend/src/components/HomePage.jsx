@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import { Bot, TrendingUp, Zap, ArrowRight, Menu, X, ChevronRight, Star, Sparkles } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
@@ -157,10 +158,10 @@ const HomePage = () => {
                   <div className="aspect-square relative">
                     <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-purple-900/20 rounded-full blur-3xl animate-pulse"></div>
                     <div 
-                      className={`relative transition-all duration-300 ${
+                      className={`relative ${
                         robotState.dancing 
                           ? `animate-robot-${robotState.action}` 
-                          : ''
+                          : 'transition-all duration-300'
                       }`}
                       style={{
                         filter: robotState.dancing 
