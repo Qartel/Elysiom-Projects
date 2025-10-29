@@ -192,9 +192,19 @@ const HomePage = () => {
                     <ChevronRight className="ml-2 w-5 h-5" />
                   </Button>
                   
-                  <Button onClick={() => scrollToSection('products')} size="lg" variant="outline" className="border-2 border-gray-700 text-white hover:bg-gray-900 px-8 py-6 text-lg rounded-xl transition-all duration-300">
+                  <Button
+                    onClick={() =>
+                      triggerRobotAndThen('thinking', () => {
+                        scrollToSection('products');
+                      })
+                    }
+                    size="lg"
+                    variant="outline"
+                    className="border-2 border-gray-700 text-white hover:bg-gray-900 px-8 py-6 text-lg rounded-xl transition-all duration-300"
+                  >
                     View Products
                   </Button>
+                  
                 </div>
                 {/* Stats */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-8">
