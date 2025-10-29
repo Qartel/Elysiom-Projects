@@ -15,6 +15,8 @@ const iconMap = {
 const HomePage = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [robotState, setRobotState] = useState({ dancing: false, color: 'purple' });
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,6 +25,18 @@ const HomePage = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+    const handleRobotAction = (action) => {
+    let color = 'purple';
+    if (action === 'no') color = 'red';
+    if (action === 'maybe') color = 'blue';
+    if (action === 'yes') color = 'green';
+    
+    setRobotState({ dancing: true, color, action });
+    setTimeout(() => {
+      setRobotState({ dancing: false, color: 'purple', action: null });
+    }, 1200);
+  };
 
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
@@ -137,10 +151,84 @@ const HomePage = () => {
               </div>
 
               {/* Right - Animated Robot */}
+              {/* Right - Animated Robot */}
               <div className="flex items-center justify-center">
-                <div className="relative w-full max-w-md aspect-square">
-                  <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-purple-900/20 rounded-full blur-3xl animate-pulse"></div>
-                  <AnimatedRobot />
+                <div className="relative w-full max-w-md">
+                  <div className="aspect-square relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-purple-900/20 rounded-full blur-3xl animate-pulse"></div>
+                    <div 
+                      className={`relative transition-all duration-300 ${
+                        robotState.dancing 
+                          ? `animate-robot-${robotState.action}` 
+                          : ''
+                      }`}
+                      style={{
+                        filter: robotState.dancing 
+                          ? `drop-shadow(0 0 80px rgba(${
+                              robotState.color === 'red' ? '239, 68, 68' :
+                              robotState.color === 'blue' ? '59, 130, 246' :
+                              robotState.color === 'green' ? '34, 197, 94' :
+                              '147, 51, 234'
+                            }, 0.8))` 
+                          : 'drop-shadow(0 0 60px rgba(147, 51, 234, 0.4))'
+                      }}
+                    >
+                      <AnimatedRobot armsPosition={
+                        robotState.dancing 
+                          ? (robotState.action === 'yes' ? 'celebration' : 
+                             robotState.action === 'no' ? 'raised' : 'normal')
+                          : 'normal'
+                      } />
+                    </div>
+                    {/* Floating particles */}
+                    <div className={`absolute top-1/4 left-1/4 w-3 h-3 rounded-full ${robotState.dancing ? 'animate-ping-fast' : 'animate-ping'}`}
+                      style={{ backgroundColor: robotState.dancing ? 
+                        (robotState.color === 'red' ? '#ef4444' : 
+                         robotState.color === 'blue' ? '#3b82f6' : 
+                         robotState.color === 'green' ? '#22c55e' : '#a855f7') : '#a855f7' 
+                      }}></div>
+                    <div className={`absolute bottom-1/3 right-1/4 w-2 h-2 rounded-full ${robotState.dancing ? 'animate-ping-fast' : 'animate-ping'}`} 
+                      style={{ 
+                        animationDelay: '0.5s',
+                        backgroundColor: robotState.dancing ? 
+                          (robotState.color === 'red' ? '#f87171' : 
+                           robotState.color === 'blue' ? '#60a5fa' : 
+                           robotState.color === 'green' ? '#4ade80' : '#c084fc') : '#c084fc' 
+                      }}></div>
+                    <div className={`absolute top-1/2 right-1/3 w-2 h-2 rounded-full ${robotState.dancing ? 'animate-ping-fast' : 'animate-ping'}`} 
+                      style={{ 
+                        animationDelay: '1s',
+                        backgroundColor: robotState.dancing ? 
+                          (robotState.color === 'red' ? '#dc2626' : 
+                           robotState.color === 'blue' ? '#2563eb' : 
+                           robotState.color === 'green' ? '#16a34a' : '#9333ea') : '#9333ea' 
+                      }}></div>
+                  </div>
+                  
+                  {/* Action Buttons */}
+                  <div className="flex gap-3 mt-6 justify-center">
+                    <Button
+                      onClick={() => handleRobotAction('no')}
+                      disabled={robotState.dancing}
+                      className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-red-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      No
+                    </Button>
+                    <Button
+                      onClick={() => handleRobotAction('maybe')}
+                      disabled={robotState.dancing}
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Maybe
+                    </Button>
+                    <Button
+                      onClick={() => handleRobotAction('yes')}
+                      disabled={robotState.dancing}
+                      className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-green-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Yes
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>

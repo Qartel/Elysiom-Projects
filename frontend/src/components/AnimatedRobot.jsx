@@ -1,7 +1,7 @@
 import React from 'react';
 import './AnimatedRobot.css';
 
-const AnimatedRobot = () => {
+const AnimatedRobot = ({ armsPosition = 'normal' }) => {
   return (
     <div className="robot-container">
       <svg
@@ -64,14 +64,14 @@ const AnimatedRobot = () => {
         </g>
         
         {/* Left Arm */}
-        <g className="left-arm">
+        <g className={`left-arm ${armsPosition === 'raised' ? 'arms-raised' : armsPosition === 'celebration' ? 'arms-celebration' : ''}`}>
           <rect x="90" y="220" width="35" height="80" rx="17" fill="url(#limbGradient)" stroke="#a855f7" strokeWidth="2" />
           <rect x="85" y="300" width="40" height="60" rx="15" fill="url(#limbGradient)" stroke="#a855f7" strokeWidth="2" />
           <circle cx="105" cy="340" r="8" fill="#c084fc" className="joint-glow" />
         </g>
         
         {/* Right Arm */}
-        <g className="right-arm">
+        <g className={`right-arm ${armsPosition === 'raised' ? 'arms-raised' : armsPosition === 'celebration' ? 'arms-celebration' : ''}`}>
           <rect x="275" y="220" width="35" height="80" rx="17" fill="url(#limbGradient)" stroke="#a855f7" strokeWidth="2" />
           <rect x="275" y="300" width="40" height="60" rx="15" fill="url(#limbGradient)" stroke="#a855f7" strokeWidth="2" />
           <circle cx="295" cy="340" r="8" fill="#c084fc" className="joint-glow" />

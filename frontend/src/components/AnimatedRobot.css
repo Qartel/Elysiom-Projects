@@ -194,6 +194,19 @@
 .left-arm {
   transform-origin: 107px 220px;
   animation: leftArmWave 5s ease-in-out infinite;
+  transition: all 0.3s ease-out;
+}
+
+/* Red button - arms to sides */
+.left-arm.arms-raised {
+  animation: none;
+  transform: rotate(-90deg);
+}
+
+/* Green button - arms all the way up in celebration */
+.left-arm.arms-celebration {
+  animation: none;
+  transform: rotate(-135deg) translateY(-10px);
 }
 
 @keyframes leftArmWave {
@@ -212,6 +225,19 @@
 .right-arm {
   transform-origin: 293px 220px;
   animation: rightArmGesture 6s ease-in-out infinite;
+  transition: all 0.3s ease-out;
+}
+
+/* Red button - arms to sides */
+.right-arm.arms-raised {
+  animation: none;
+  transform: rotate(90deg);
+}
+
+/* Green button - arms all the way up in celebration */
+.right-arm.arms-celebration {
+  animation: none;
+  transform: rotate(135deg) translateY(-10px);
 }
 
 @keyframes rightArmGesture {
