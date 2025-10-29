@@ -127,6 +127,12 @@
   transform: rotate(-135deg) translateY(-10px);
 }
 
+.left-arm.arms-thinking {
+  animation: none;
+  transform: rotate(-40deg) translateY(-5px) translateX(10px);
+  /* looks like it's bringing its hand toward its face */
+}
+
 @keyframes leftArmWave {
   0%, 100% { transform: rotate(0deg); }
   20% { transform: rotate(-15deg); }
@@ -145,6 +151,12 @@
 .right-arm.arms-celebration {
   animation: none;
   transform: rotate(135deg) translateY(-10px);
+}
+
+.right-arm.arms-thinking {
+  animation: none;
+  transform: rotate(40deg) translateY(-5px) translateX(-10px);
+  /* mirror pose */
 }
 
 @keyframes rightArmGesture {
@@ -288,3 +300,29 @@
     max-width: 300px;
   }
 }
+
+@keyframes robot-thinking {
+  0% {
+    transform: scale(1) translateY(0) rotate(0deg);
+  }
+  20% {
+    transform: scale(1.06) translateY(-8px) rotate(-4deg);
+  }
+  40% {
+    transform: scale(1.06) translateY(-8px) rotate(4deg);
+  }
+  60% {
+    transform: scale(1.08) translateY(-14px) rotate(0deg);
+  }
+  80% {
+    transform: scale(1.05) translateY(-10px) rotate(-3deg);
+  }
+  100% {
+    transform: scale(1) translateY(0) rotate(0deg);
+  }
+}
+
+.robot-thinking-anim {
+  animation: robot-thinking 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+

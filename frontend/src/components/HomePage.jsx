@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/
 import { Badge } from './ui/badge';
 import { services, products, caseStudies, testimonials, stats } from '../mock';
 import AnimatedRobot from './AnimatedRobot';
+import elysiomLogo from "@/assets/elysiom-logo.png";
 
 const iconMap = {
   Bot: Bot,
@@ -27,64 +28,89 @@ const HomePage = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const triggerRobotAndThen = (actionType, afterDance) => {
-    // map action type to robot mood
-    // You can customize this however you like
-    let color = 'purple';
-    let poseAction = null; // "yes", "no", etc (used for arms + animation)
+  // const triggerRobotAndThen = (actionType, afterDance) => {
+  //   // map action type to robot mood
+  //   // You can customize this however you like
+  //   let color = 'purple';
+  //   let poseAction = null; // "yes", "no", etc (used for arms + animation)
 
-    switch (actionType) {
-      case 'success': // happy / celebrate
-        color = 'green';
-        poseAction = 'yes';
-        break;
-      case 'thinking': // evaluating / maybe
-        color = 'blue';
-        poseAction = 'maybe';
-        break;
-      case 'error': // reject / no
-        color = 'red';
-        poseAction = 'no';
-        break;
-      default:
-        color = 'purple';
-        poseAction = 'maybe';
-    }
+  //   switch (actionType) {
+  //     case 'success': // happy / celebrate
+  //       color = 'green';
+  //       poseAction = 'yes';
+  //       break;
+  //     case 'thinking': // evaluating / maybe
+  //       color = 'blue';
+  //       poseAction = 'maybe';
+  //       break;
+  //     case 'error': // reject / no
+  //       color = 'red';
+  //       poseAction = 'no';
+  //       break;
+  //     default:
+  //       color = 'purple';
+  //       poseAction = 'maybe';
+  //   }
 
-    // 1. show robot animation
+  //   // 1. show robot animation
+  //   setRobotState({
+  //     dancing: true,
+  //     color,
+  //     action: poseAction, // 'yes' | 'maybe' | 'no'
+  //   });
+
+  //   // 2. after animation ends, reset robot and do the real work
+  //   setTimeout(() => {
+  //     setRobotState({
+  //       dancing: false,
+  //       color: 'purple',
+  //       action: null,
+  //     });
+
+  //     // then run whatever the CTA wanted to do
+  //     if (typeof afterDance === 'function') {
+  //       afterDance();
+  //     }
+  //   }, 1200); // matches animation duration
+  // };
+
+const triggerRobotAndThen = (actionType, afterDance) => {
+  let color = 'purple';
+  let poseAction = null; // 'yes' | 'thinking' | 'no'
+
+  if (actionType === 'success') {
+    color = 'green';
+    poseAction = 'yes';
+  } else if (actionType === 'thinking') {
+    color = 'blue';
+    poseAction = 'thinking';
+  } else if (actionType === 'error') {
+    color = 'red';
+    poseAction = 'no';
+  } else {
+    color = 'purple';
+    poseAction = 'thinking';
+  }
+
+  setRobotState({
+    dancing: true,
+    color,
+    action: poseAction,
+  });
+
+  setTimeout(() => {
     setRobotState({
-      dancing: true,
-      color,
-      action: poseAction, // 'yes' | 'maybe' | 'no'
+      dancing: false,
+      color: 'purple',
+      action: null,
     });
 
-    // 2. after animation ends, reset robot and do the real work
-    setTimeout(() => {
-      setRobotState({
-        dancing: false,
-        color: 'purple',
-        action: null,
-      });
+    if (typeof afterDance === 'function') {
+      afterDance();
+    }
+  }, 1000);
+};
 
-      // then run whatever the CTA wanted to do
-      if (typeof afterDance === 'function') {
-        afterDance();
-      }
-    }, 1200); // matches animation duration
-  };
-
-
-    const handleRobotAction = (action) => {
-    let color = 'purple';
-    if (action === 'no') color = 'red';
-    if (action === 'maybe') color = 'blue';
-    if (action === 'yes') color = 'green';
-    
-    setRobotState({ dancing: true, color, action });
-    setTimeout(() => {
-      setRobotState({ dancing: false, color: 'purple', action: null });
-    }, 1200);
-  };
 
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
@@ -105,7 +131,11 @@ const HomePage = () => {
             {/* Logo - Far Left */}
             <div className="flex items-center space-x-3 cursor-pointer group">
               <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-600 to-purple-900 flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300">
-                <Sparkles className="w-6 h-6 text-white" />
+                <img
+                  src={elysiomLogo}
+                  alt="Elysiom Logo"
+                  className="h-8 w-auto"
+                />
               </div>
               <span className="text-2xl font-bold tracking-tight">
                 <span className="bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">ELYSIOM</span>
@@ -243,11 +273,11 @@ const HomePage = () => {
                         dancing={robotState.dancing}
                         armsPosition={
                           robotState.dancing 
-                            ? (robotState.action === 'yes'
-                                ? 'celebration'
-                                : robotState.action === 'no'
-                                  ? 'raised'
-                                  : 'normal')
+                            ? robotState.action === 'yes'
+                              ? 'celebration'
+                              : robotState.action === 'no'
+                                ? 'raised'
+                                : 'thinking'
                             : 'normal'
                         }
                       />

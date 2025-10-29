@@ -63,19 +63,40 @@ const AnimatedRobot = ({ armsPosition = 'normal', dancing = false }) => {
           <circle cx="250" cy="280" r="5" fill="#a855f7" className="indicator indicator-4" />
         </g>
         
-        {/* Left Arm */}
-        <g className={`left-arm ${armsPosition === 'raised' ? 'arms-raised' : armsPosition === 'celebration' ? 'arms-celebration' : ''}`}>
+        {/* Left arm */}
+        <g
+          className={`left-arm ${
+            armsPosition === 'raised'
+              ? 'arms-raised'
+              : armsPosition === 'celebration'
+              ? 'arms-celebration'
+              : armsPosition === 'thinking'
+              ? 'arms-thinking'
+              : ''
+          }`}
+        >
           <rect x="90" y="220" width="35" height="80" rx="17" fill="url(#limbGradient)" stroke="#a855f7" strokeWidth="2" />
           <rect x="85" y="300" width="40" height="60" rx="15" fill="url(#limbGradient)" stroke="#a855f7" strokeWidth="2" />
           <circle cx="105" cy="340" r="8" fill="#c084fc" className="joint-glow" />
         </g>
-        
-        {/* Right Arm */}
-        <g className={`right-arm ${armsPosition === 'raised' ? 'arms-raised' : armsPosition === 'celebration' ? 'arms-celebration' : ''}`}>
+
+        {/* Right arm */}
+        <g
+          className={`right-arm ${
+            armsPosition === 'raised'
+              ? 'arms-raised'
+              : armsPosition === 'celebration'
+              ? 'arms-celebration'
+              : armsPosition === 'thinking'
+              ? 'arms-thinking'
+              : ''
+          }`}
+        >
           <rect x="275" y="220" width="35" height="80" rx="17" fill="url(#limbGradient)" stroke="#a855f7" strokeWidth="2" />
           <rect x="275" y="300" width="40" height="60" rx="15" fill="url(#limbGradient)" stroke="#a855f7" strokeWidth="2" />
           <circle cx="295" cy="340" r="8" fill="#c084fc" className="joint-glow" />
         </g>
+        
         
         {/* Left Leg */}
         <g className="left-leg">
