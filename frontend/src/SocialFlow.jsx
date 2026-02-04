@@ -1,188 +1,516 @@
-import React, { useState, useEffect } from 'react';
-import { Search, Download, Plus, Settings, BarChart3, Calendar, Copy } from 'lucide-react';
-import { Button } from './components/ui/button';
-import { Card, CardContent } from './components/ui/card';
-import { Input } from './components/ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/ui/tabs';
-import { platforms, contentLibrary, platformStats, getTotalStats } from './socialMediaContent';
-import PlatformTab from './components/PlatformTab';
+// frontend/src/SocialFlow.jsx
+import React, { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useTheme } from "@mui/material/styles";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+import {
+  Box,
+  Paper,
+  Typography,
+  Stack,
+  Button,
+  Tabs,
+  Tab,
+  TextField,
+  InputAdornment,
+  Chip,
+  Divider,
+  IconButton,
+  Tooltip,
+} from "@mui/material";
 
-const SocialFlow = () => {
-  const [selectedPlatform, setSelectedPlatform] = useState('instagram');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [loading, setLoading] = useState(true);
-  const totalStats = getTotalStats();
+import SearchIcon from "@mui/icons-material/Search";
+import AddIcon from "@mui/icons-material/Add";
+import SettingsIcon from "@mui/icons-material/Settings";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import InsightsIcon from "@mui/icons-material/Insights";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import CollectionsBookmarkIcon from "@mui/icons-material/CollectionsBookmark";
+import ListAltIcon from "@mui/icons-material/ListAlt";
 
-  useEffect(() => {
-    // Initialize app
-    setLoading(false);
-    // TODO: Fetch content from backend
-  }, []);
+// Data
+import { platforms, contentLibrary, platformStats, getTotalStats } from "./socialMediaContent";
 
-  const currentPlatform = platforms.find(p => p.id === selectedPlatform);
-
-  return (
-    <div className="min-h-screen bg-black text-white flex flex-col">
-      {/* Header */}
-      <div className="border-b border-gray-800 bg-black/50 backdrop-blur-xl sticky top-0 z-50">
-        <div className="max-w-[1800px] mx-auto px-6 py-4">
-          {/* Top Bar */}
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-600 to-purple-900 flex items-center justify-center">
-                <span className="text-2xl">🚀</span>
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold">
-                  <span className="bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">SocialFlow</span>
-                </h1>
-                <p className="text-sm text-gray-400">Multi-Platform Content Hub</p>
-              </div>
-            </div>
-            <div className="flex gap-3">
-              <Button variant="outline" className="border-gray-700 text-white hover:bg-gray-800">
-                <BarChart3 className="w-4 h-4 mr-2" />
-                Analytics
-              </Button>
-              <Button variant="outline" className="border-gray-700 text-white hover:bg-gray-800">
-                <Calendar className="w-4 h-4 mr-2" />
-                Calendar
-              </Button>
-              <Button variant="outline" className="border-gray-700 text-white hover:bg-gray-800">
-                <Settings className="w-4 h-4 mr-2" />
-                Settings
-              </Button>
-              <Button className="bg-purple-600 hover:bg-purple-700 text-white">
-                <Plus className="w-4 h-4 mr-2" />
-                Create Content
-              </Button>
-            </div>
-          </div>
-
-          {/* Global Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
-            <Card className="bg-gray-900/50 border-gray-800">
-              <CardContent className="pt-4">
-                <div className="text-2xl font-bold text-purple-400">{totalStats.total}</div>
-                <div className="text-xs text-gray-500">Total Content</div>
-              </CardContent>
-            </Card>
-            <Card className="bg-gray-900/50 border-gray-800">
-              <CardContent className="pt-4">
-                <div className="text-2xl font-bold text-green-400">{totalStats.posted}</div>
-                <div className="text-xs text-gray-500">Posted</div>
-              </CardContent>
-            </Card>
-            <Card className="bg-gray-900/50 border-gray-800">
-              <CardContent className="pt-4">
-                <div className="text-2xl font-bold text-blue-400">{totalStats.scheduled}</div>
-                <div className="text-xs text-gray-500">Scheduled</div>
-              </CardContent>
-            </Card>
-            <Card className="bg-gray-900/50 border-gray-800">
-              <CardContent className="pt-4">
-                <div className="text-2xl font-bold text-gray-400">{totalStats.draft}</div>
-                <div className="text-xs text-gray-500">Drafts</div>
-              </CardContent>
-            </Card>
-            <Card className="bg-gray-900/50 border-gray-800">
-              <CardContent className="pt-4">
-                <div className="text-2xl font-bold text-purple-400">5</div>
-                <div className="text-xs text-gray-500">Platforms</div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Platform Tabs */}
-          <Tabs value={selectedPlatform} onValueChange={setSelectedPlatform} className="w-full">
-            <TabsList className="w-full justify-start bg-gray-900/50 border border-gray-800 p-1">
-              {platforms.map((platform) => (
-                <TabsTrigger
-                  key={platform.id}
-                  value={platform.id}
-                  className={`data-[state=active]:bg-gradient-to-r data-[state=active]:${platform.gradient} data-[state=active]:text-white px-6 py-2.5 relative group`}
-                >
-                  <span className="text-xl mr-2">{platform.icon}</span>
-                  <span className="font-medium">{platform.name}</span>
-                  <span className="ml-2 px-2 py-0.5 bg-black/20 rounded-full text-xs">
-                    {platformStats[platform.id].total}
-                  </span>
-                </TabsTrigger>
-              ))}
-            </TabsList>
-          </Tabs>
-        </div>
-      </div>
-
-      {/* Main Content Area */}
-      <div className="flex-1 max-w-[1800px] mx-auto px-6 py-8 w-full">
-        {/* Search & Filter Bar */}
-        <div className="flex gap-4 mb-6">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500" />
-            <Input
-              placeholder={`Search ${currentPlatform.name} content...`}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 bg-gray-900/50 border-gray-800 text-white"
-            />
-          </div>
-          <Button variant="outline" className="border-gray-700 text-white hover:bg-gray-800">
-            <Copy className="w-4 h-4 mr-2" />
-            Duplicate to Other Platforms
-          </Button>
-        </div>
-
-        {/* Platform-Specific Content */}
-        <Tabs value={selectedPlatform} className="w-full">
-          {platforms.map((platform) => (
-            <TabsContent key={platform.id} value={platform.id}>
-              <PlatformTab
-                platform={platform}
-                content={contentLibrary[platform.id]}
-                stats={platformStats[platform.id]}
-                searchQuery={searchQuery}
-              />
-            </TabsContent>
-          ))}
-        </Tabs>
-      </div>
-
-      {/* Footer - Powered by Elysiom */}
-      <footer className="border-t border-gray-800 bg-gray-950 py-6 mt-auto">
-        <div className="max-w-[1800px] mx-auto px-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="text-sm text-gray-500">
-              © 2024 SocialFlow. All rights reserved.
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-500">Powered by</span>
-              <a 
-                href="https://elysiom.com" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 group"
-              >
-                <div className="w-6 h-6 rounded bg-gradient-to-br from-purple-600 to-purple-900 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <span className="text-white text-xs font-bold">E</span>
-                </div>
-                <span className="font-semibold bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent group-hover:from-purple-300 group-hover:to-purple-500 transition-all duration-300">
-                  Elysiom
-                </span>
-              </a>
-            </div>
-            <div className="flex items-center gap-4 text-xs text-gray-600">
-              <a href="#" className="hover:text-gray-400 transition-colors">Terms</a>
-              <a href="#" className="hover:text-gray-400 transition-colors">Privacy</a>
-              <a href="#" className="hover:text-gray-400 transition-colors">Support</a>
-            </div>
-          </div>
-        </div>
-      </footer>
-    </div>
-  );
+const PLATFORM_ACCENTS = {
+  instagram: "#E1306C",
+  youtube: "#FF0000",
+  linkedin: "#0A66C2",
+  facebook: "#1877F2",
+  threads: "#FFFFFF",
 };
 
-export default SocialFlow;
+const PLATFORM_BRAND = {
+  instagram: {
+    name: "Instagram",
+    accent: "#E1306C",
+    headerBg:
+      "linear-gradient(135deg, #feda75 0%, #fa7e1e 25%, #d62976 50%, #962fbf 75%, #4f5bd5 100%)",
+  },
+  youtube: {
+    name: "YouTube",
+    accent: "#FF0000",
+    headerBg: "linear-gradient(135deg, rgba(255,0,0,0.92), rgba(255,0,0,0.40))",
+  },
+  linkedin: {
+    name: "LinkedIn",
+    accent: "#0A66C2",
+    headerBg: "linear-gradient(135deg, rgba(10,102,194,0.90), rgba(10,102,194,0.35))",
+  },
+  facebook: {
+    name: "Facebook",
+    accent: "#1877F2",
+    headerBg: "linear-gradient(135deg, rgba(24,119,242,0.90), rgba(24,119,242,0.35))",
+  },
+  threads: {
+    name: "Threads",
+    accent: "#FFFFFF",
+    headerBg: "linear-gradient(135deg, rgba(255,255,255,0.20), rgba(255,255,255,0.06))",
+  },
+};
+
+function a11yProps(index) {
+  return { id: `platform-tab-${index}`, "aria-controls": `platform-tabpanel-${index}` };
+}
+
+/** “Real icon” feel without extra deps: a branded badge circle. */
+function PlatformBadge({ id }) {
+  const accent = PLATFORM_ACCENTS[id] || "#8B5CF6";
+
+  // Simple lettermark (fast + clean). Later we can swap to actual SVG icons per platform.
+  const letter =
+    id === "instagram" ? "IG" :
+    id === "youtube" ? "YT" :
+    id === "linkedin" ? "in" :
+    id === "facebook" ? "f" :
+    id === "threads" ? "@" :
+    id.slice(0, 2).toUpperCase();
+
+  return (
+    <Box
+      sx={{
+        width: 26,
+        height: 26,
+        borderRadius: 999,
+        display: "grid",
+        placeItems: "center",
+        color: id === "threads" ? "#000" : "#fff",
+        fontSize: 12,
+        fontWeight: 900,
+        border: `1px solid ${accent}55`,
+        background:
+          id === "instagram"
+            ? "linear-gradient(135deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5)"
+            : id === "threads"
+            ? "linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.65))"
+            : `${accent}`,
+        boxShadow: `0 10px 30px ${accent}22`,
+      }}
+    >
+      {letter}
+    </Box>
+  );
+}
+
+function StatCard({ label, value, tone = "primary", accent }) {
+  const chipColor =
+    tone === "success" ? "success" :
+    tone === "info" ? "info" :
+    tone === "warning" ? "warning" :
+    tone === "secondary" ? "secondary" : "primary";
+
+  return (
+    <Paper
+      sx={{
+        p: 2,
+        position: "relative",
+        overflow: "hidden",
+        transition: "transform 140ms ease, border-color 140ms ease, box-shadow 140ms ease",
+        "&:hover": {
+          transform: "translateY(-2px)",
+          borderColor: accent ? `${accent}66` : "rgba(139,92,246,0.50)",
+          boxShadow: accent ? `0 18px 60px ${accent}22` : "0 18px 60px rgba(139,92,246,0.18)",
+        },
+        "&:before": {
+          content: '""',
+          position: "absolute",
+          inset: 0,
+          background: `radial-gradient(700px 240px at 20% 0%, ${accent}12, transparent 60%)`,
+          pointerEvents: "none",
+        },
+      }}
+    >
+      <Stack spacing={0.5} sx={{ position: "relative" }}>
+        <Typography variant="h5" sx={{ fontWeight: 950, lineHeight: 1 }}>
+          {value}
+        </Typography>
+        <Stack direction="row" spacing={1} alignItems="center">
+          <Typography variant="body2" sx={{ opacity: 0.75 }}>
+            {label}
+          </Typography>
+          <Chip size="small" label="Live" color={chipColor} variant="outlined" />
+        </Stack>
+      </Stack>
+    </Paper>
+  );
+}
+
+function Column({ title, count, items, accent }) {
+  return (
+    <Paper
+      sx={{
+        p: 2,
+        height: "100%",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      <Box
+        sx={{
+          position: "absolute",
+          inset: 0,
+          background: `radial-gradient(900px 280px at 20% 0%, ${accent}10, transparent 60%)`,
+          pointerEvents: "none",
+        }}
+      />
+      <Stack sx={{ position: "relative" }}>
+        <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 1 }}>
+          <Typography sx={{ fontWeight: 950 }}>{title}</Typography>
+          <Chip size="small" label={count} />
+        </Stack>
+        <Divider sx={{ mb: 1.5 }} />
+        <Stack spacing={1}>
+          {items.length === 0 ? (
+            <Typography variant="body2" sx={{ opacity: 0.7 }}>
+              Nothing here yet.
+            </Typography>
+          ) : (
+            items.slice(0, 5).map((x) => (
+              <Paper
+                key={x.id}
+                variant="outlined"
+                sx={{
+                  p: 1.25,
+                  transition: "transform 140ms ease, border-color 140ms ease, box-shadow 140ms ease",
+                  "&:hover": {
+                    transform: "translateY(-1px)",
+                    borderColor: `${accent}66`,
+                    boxShadow: `0 16px 50px ${accent}18`,
+                    background: `linear-gradient(180deg, ${accent}10, transparent 55%)`,
+                  },
+                }}
+              >
+                <Stack spacing={0.5}>
+                  <Stack direction="row" alignItems="center" justifyContent="space-between">
+                    <Typography sx={{ fontWeight: 850 }} noWrap>
+                      {x.title}
+                    </Typography>
+                    <Chip size="small" label={x.type || "post"} />
+                  </Stack>
+                  <Typography variant="body2" sx={{ opacity: 0.75 }}>
+                    {x.category || "content"}
+                  </Typography>
+                </Stack>
+              </Paper>
+            ))
+          )}
+        </Stack>
+      </Stack>
+    </Paper>
+  );
+}
+
+export default function SocialFlow() {
+  const navigate = useNavigate();
+  const theme = useTheme();
+
+  const totalStats = getTotalStats();
+  const [selectedPlatform, setSelectedPlatform] = useState(platforms?.[0]?.id || "instagram");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const brand =
+    PLATFORM_BRAND[selectedPlatform] || {
+      name: "Platform",
+      accent: theme.palette.primary.main,
+      headerBg: "rgba(255,255,255,0.04)",
+    };
+
+  const platformAccent = brand.accent;
+
+  const currentPlatform = useMemo(
+    () => platforms.find((p) => p.id === selectedPlatform) || platforms[0],
+    [selectedPlatform]
+  );
+
+  const platformItems = contentLibrary?.[selectedPlatform] || [];
+
+  const filtered = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return platformItems;
+    return platformItems.filter((x) =>
+      `${x.title || ""} ${x.category || ""} ${x.type || ""}`.toLowerCase().includes(q)
+    );
+  }, [platformItems, searchQuery]);
+
+  const drafts = filtered.filter((x) => (x.status || "").toLowerCase() === "draft");
+  const scheduled = filtered.filter((x) => (x.status || "").toLowerCase() === "scheduled");
+  const posted = filtered.filter((x) => (x.status || "").toLowerCase() === "posted");
+
+  const statsForPlatform =
+    platformStats?.[selectedPlatform] || { posted: 0, scheduled: 0, draft: 0, total: 0, engagement: 0 };
+
+  return (
+    <Box sx={{ minHeight: "100vh", bgcolor: "background.default", color: "text.primary" }}>
+      {/* Header */}
+      <Box
+        sx={{
+          position: "sticky",
+          top: 0,
+          zIndex: 10,
+          borderBottom: "1px solid",
+          borderColor: "divider",
+          backdropFilter: "blur(14px)",
+          bgcolor: theme.palette.mode === "dark" ? "rgba(0,0,0,0.35)" : "rgba(255,255,255,0.55)",
+        }}
+      >
+        <Box sx={{ maxWidth: 1800, mx: "auto", px: 3, py: 2 }}>
+          {/* Top Bar */}
+          <Stack
+            direction={{ xs: "column", md: "row" }}
+            spacing={2}
+            alignItems={{ md: "center" }}
+            justifyContent="space-between"
+            sx={{ mb: 2 }}
+          >
+            <Stack direction="row" spacing={1.5} alignItems="center">
+              <Box
+                sx={{
+                  width: 48,
+                  height: 48,
+                  borderRadius: 3,
+                  display: "grid",
+                  placeItems: "center",
+                  bgcolor: "primary.main",
+                  boxShadow: `0 10px 40px ${theme.palette.primary.main}22`,
+                }}
+              >
+                <Typography sx={{ fontSize: 22 }}>🚀</Typography>
+              </Box>
+
+              <Box>
+                <Typography variant="h6" sx={{ fontWeight: 950, lineHeight: 1.1 }}>
+                  SocialFlow
+                </Typography>
+                <Typography variant="body2" sx={{ opacity: 0.7 }}>
+                  Multi-Platform Content Hub
+                </Typography>
+              </Box>
+            </Stack>
+
+            <Stack
+              direction="row"
+              spacing={1}
+              sx={{ flexWrap: "wrap", justifyContent: { xs: "flex-start", md: "flex-end" } }}
+            >
+              <Button variant="outlined" startIcon={<InsightsIcon />} onClick={() => navigate("/analytics")}>
+                Analytics
+              </Button>
+              <Button variant="outlined" startIcon={<CalendarMonthIcon />} onClick={() => navigate("/calendar")}>
+                Calendar
+              </Button>
+              <Button variant="outlined" startIcon={<CollectionsBookmarkIcon />} onClick={() => navigate("/library")}>
+                Library
+              </Button>
+              <Button variant="outlined" startIcon={<ListAltIcon />} onClick={() => navigate("/queue")}>
+                Queue
+              </Button>
+              <Button variant="outlined" startIcon={<SettingsIcon />} onClick={() => navigate("/settings")}>
+                Settings
+              </Button>
+              <Button variant="contained" startIcon={<AddIcon />} onClick={() => navigate("/board")}>
+                Create Content
+              </Button>
+            </Stack>
+          </Stack>
+
+          {/* Global Stats - fill row */}
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)", md: "repeat(5, 1fr)" },
+              gap: 2,
+              mb: 2,
+            }}
+          >
+            <StatCard label="Total Content" value={totalStats.total} tone="primary" accent={platformAccent} />
+            <StatCard label="Posted" value={totalStats.posted} tone="success" accent={platformAccent} />
+            <StatCard label="Scheduled" value={totalStats.scheduled} tone="info" accent={platformAccent} />
+            <StatCard label="Drafts" value={totalStats.draft} tone="warning" accent={platformAccent} />
+            <StatCard label="Platforms" value={platforms.length} tone="secondary" accent={platformAccent} />
+          </Box>
+
+          {/* Platform Tabs (brand tinted) */}
+          <Paper
+            sx={{
+              p: 1,
+              position: "relative",
+              overflow: "hidden",
+              "&:before": {
+                content: '""',
+                position: "absolute",
+                inset: 0,
+                background: brand.headerBg,
+                opacity: 0.12,
+                pointerEvents: "none",
+              },
+            }}
+          >
+            <Tabs
+              sx={{ position: "relative" }}
+              value={selectedPlatform}
+              onChange={(_, v) => setSelectedPlatform(v)}
+              variant="scrollable"
+              scrollButtons="auto"
+            >
+              {platforms.map((p, idx) => {
+                const accent = PLATFORM_ACCENTS[p.id] || theme.palette.primary.main;
+                return (
+                  <Tab
+                    key={p.id}
+                    value={p.id}
+                    label={
+                      <Stack direction="row" spacing={1} alignItems="center">
+                        <PlatformBadge id={p.id} />
+                        <Typography sx={{ fontWeight: 900 }}>{p.name}</Typography>
+                        <Chip size="small" label={platformStats[p.id]?.total ?? 0} />
+                      </Stack>
+                    }
+                    {...a11yProps(idx)}
+                    sx={{
+                      "&:hover": { backgroundColor: `${accent}12` },
+                      "&.Mui-selected": {
+                        backgroundColor: `${accent}16`,
+                        boxShadow: `inset 0 0 0 1px ${accent}40`,
+                      },
+                    }}
+                  />
+                );
+              })}
+            </Tabs>
+          </Paper>
+        </Box>
+      </Box>
+
+      {/* Main */}
+      <Box sx={{ maxWidth: 1800, mx: "auto", px: 3, py: 3 }}>
+        {/* Search + actions */}
+        <Stack direction={{ xs: "column", md: "row" }} spacing={2} sx={{ mb: 2 }}>
+          <TextField
+            fullWidth
+            placeholder={`Search ${currentPlatform?.name || ""} content...`}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                boxShadow: `0 0 0 1px ${platformAccent}22`,
+                "&:hover": { boxShadow: `0 0 0 1px ${platformAccent}55` },
+                "&.Mui-focused": { boxShadow: `0 0 0 1px ${platformAccent}88` },
+              },
+            }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon sx={{ opacity: 0.7 }} />
+                </InputAdornment>
+              ),
+            }}
+          />
+
+          <Button
+            variant="outlined"
+            startIcon={<ContentCopyIcon />}
+            onClick={() => navigate("/board")}
+            sx={{
+              whiteSpace: "nowrap",
+              borderColor: `${platformAccent}55`,
+              "&:hover": { borderColor: `${platformAccent}AA`, backgroundColor: `${platformAccent}10` },
+            }}
+          >
+            Duplicate to Other Platforms
+          </Button>
+        </Stack>
+
+        {/* Platform summary row (brand background, white text) */}
+        <Paper
+          sx={{
+            p: 2,
+            mb: 2,
+            position: "relative",
+            overflow: "hidden",
+            color: "#fff",
+            borderColor: `${platformAccent}66`,
+            "&:before": {
+              content: '""',
+              position: "absolute",
+              inset: 0,
+              background: brand.headerBg,
+              opacity: 0.26,
+              pointerEvents: "none",
+            },
+            "&:after": {
+              content: '""',
+              position: "absolute",
+              inset: 0,
+              background: `radial-gradient(900px 260px at 20% 0%, ${platformAccent}28, transparent 62%)`,
+              pointerEvents: "none",
+            },
+          }}
+        >
+          <Stack
+            sx={{ position: "relative" }}
+            direction={{ xs: "column", md: "row" }}
+            spacing={2}
+            alignItems={{ md: "center" }}
+            justifyContent="space-between"
+          >
+            <Stack direction="row" spacing={1.5} alignItems="center">
+              <PlatformBadge id={selectedPlatform} />
+              <Box>
+                <Typography sx={{ fontWeight: 950, fontSize: 18, color: "#fff" }}>{brand.name}</Typography>
+                <Typography variant="body2" sx={{ opacity: 0.88, color: "rgba(255,255,255,0.88)" }}>
+                  {statsForPlatform.total} pieces • {statsForPlatform.posted} posted • {statsForPlatform.scheduled} scheduled •{" "}
+                  {statsForPlatform.draft} drafts
+                </Typography>
+              </Box>
+            </Stack>
+
+            <Stack direction="row" spacing={1} alignItems="center" sx={{ flexWrap: "wrap", gap: 1 }}>
+              <Chip
+                sx={{ color: "#fff", borderColor: "rgba(255,255,255,0.35)" }}
+                variant="outlined"
+                label={`Avg Engagement: ${statsForPlatform.engagement || statsForPlatform.avgEngagement || "—"}`}
+              />
+              <Tooltip title="Switch view (next)">
+                <IconButton sx={{ color: "#fff" }}>
+                  <InsightsIcon />
+                </IconButton>
+              </Tooltip>
+            </Stack>
+          </Stack>
+        </Paper>
+
+        {/* Board Preview - fill width */}
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: { xs: "1fr", md: "repeat(3, 1fr)" },
+            gap: 2,
+          }}
+        >
+          <Column title="Drafts" count={drafts.length} items={drafts} accent={platformAccent} />
+          <Column title="Scheduled" count={scheduled.length} items={scheduled} accent={platformAccent} />
+          <Column title="Posted" count={posted.length} items={posted} accent={platformAccent} />
+        </Box>
+      </Box>
+    </Box>
+  );
+}

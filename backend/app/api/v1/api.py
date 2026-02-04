@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.api.v1.endpoints import content, analytics
+from app.api.v1.endpoints import content, analytics, events
 
 api_router = APIRouter()
 
@@ -14,3 +14,5 @@ api_router.include_router(
     prefix="/analytics",
     tags=["analytics"]
 )
+
+api_router.include_router(events.router, tags=["events"])
