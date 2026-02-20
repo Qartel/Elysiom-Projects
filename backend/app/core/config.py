@@ -33,4 +33,9 @@ class Settings(BaseSettings):
         env_file = ".env"
         case_sensitive = True
 
+    SEED_DEMO: bool = False
+    DEMO_WORKSPACE_NAME: str = "Demo Agency"
+    DEMO_OWNER_EMAIL: str = "owner@socialflow.dev"
+    DEMO_OWNER_PASSWORD: str = "Owner123!ChangeMe"
+    
 settings = Settings()

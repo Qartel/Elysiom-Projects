@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  mongo-socialflow:
+    image: mongo:7
+    container_name: mongo-socialflow
+    ports:
+      - "27019:27017"
+    volumes:
+      - mongo_socialflow_data:/data/db
+    restart: unless-stopped
+
+volumes:
+  mongo_socialflow_data:

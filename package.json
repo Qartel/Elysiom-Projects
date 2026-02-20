@@ -10,7 +10,7 @@
     "start": "./start.sh",
     "stop": "./stop.sh",
     "frontend": "cd frontend && yarn start",
-    "backend": "cd backend && uvicorn main:app --reload --port 7002"
+    "backend": "cd backend && . .venv/bin/activate && uvicorn main:app --reload --port 7002"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"

@@ -16,6 +16,17 @@ import { ThemeCtx } from "../theme/AppThemeProvider";
 
 export default function SettingsPage() {
   const themeApi = useContext(ThemeCtx);
+  
+  if (!themeApi) {
+    return (
+      <Paper sx={{ p: 2 }}>
+        <Typography sx={{ fontWeight: 900 }}>Theme not initialized</Typography>
+        <Typography sx={{ opacity: 0.7 }}>
+          AppThemeProvider is missing around the app.
+        </Typography>
+      </Paper>
+    );
+  }
 
   return (
     <Stack spacing={2.5}>
@@ -46,47 +57,6 @@ export default function SettingsPage() {
         </Stack>
       </Paper>
     </Box>
-
-      {/* <Paper sx={{ p: 2 }}>
-        <Typography sx={{ fontWeight: 900, mb: 1 }}>Appearance</Typography>
-
-        <Stack direction={{ xs: "column", sm: "row" }} spacing={2} alignItems={{ sm: "center" }}>
-          <FormControl size="small" sx={{ minWidth: 240 }}>
-            <InputLabel>Theme Preset</InputLabel>
-            <Select
-              label="Theme Preset"
-              value={themeApi?.preset || "grey-purple"}
-              onChange={(e) => themeApi?.setPreset?.(e.target.value)}
-            >
-              <MenuItem value="grey-purple">Grey + Purple</MenuItem>
-              <MenuItem value="offwhite-green">Off-white + Green</MenuItem>
-            </Select>
-          </FormControl>
-
-          <Stack direction="row" spacing={1} alignItems="center">
-            <Chip label={`Mode: ${themeApi?.mode || "dark"}`} size="small" />
-            <Button variant="outlined" onClick={() => themeApi?.toggleMode?.()}>
-              Toggle Light/Dark
-            </Button>
-          </Stack>
-        </Stack>
-
-        <Divider sx={{ my: 2 }} />
-
-        <Typography sx={{ fontWeight: 900, mb: 1 }}>Product Readiness</Typography>
-        <Stack spacing={1}>
-          <Typography sx={{ opacity: 0.75 }}>
-            Next settings that will matter for clients:
-          </Typography>
-          <Stack direction="row" spacing={1} sx={{ flexWrap: "wrap", gap: 1 }}>
-            <Chip label="Workspaces / Tenants" />
-            <Chip label="Roles & Approvals" />
-            <Chip label="Billing & Plans" />
-            <Chip label="Connected Accounts" />
-            <Chip label="Audit Logs" />
-          </Stack>
-        </Stack>
-      </Paper> */}
 
       <Paper sx={{ p: 2 }}>
         <Typography sx={{ fontWeight: 900, mb: 1 }}>Integrations (next)</Typography>
